@@ -24,7 +24,7 @@ end
 
 module Gem
   class Requirement
-    def rpm_version_transform(op, version)
+    def self.rpm_version_transform(op, version)
       if op == '~>'
         # note:
         #
@@ -57,7 +57,7 @@ module Gem
     end
 
     def to_rpm
-      return requirements.map { |op, version| rpm_version_transform(op, version) }.flatten
+      return requirements.map { |op, version| self.class.rpm_version_transform(op, version) }.flatten
     end
 
   end
