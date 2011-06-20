@@ -44,9 +44,9 @@ BuildRequires:  ruby-devel <%= spec.required_ruby_version.to_rpm %>
 <% if d.type != :development %>
 <% d.requirement.requirements.each do |op, version| %>
 # <%= d.name %> <%= "#{op} #{version}" %>
-<% for req in Gem::Requirement.rpm_version_transform(op, version) %>
-BuildRequires:  rubygem-<%= d.name %> <%= req %>
-Requires:       rubygem-<%= d.name %> <%= req %>
+<% for req in Gem::Requirement.rpm_version_transform_opensuse("rubygem-#{d.name}", op, version) %>
+BuildRequires:  <%= req %>
+Requires:       <%= req %>
 <% end %>
 <% end %>
 <% end %>

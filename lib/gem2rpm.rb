@@ -56,6 +56,17 @@ module Gem
       return [""]
     end
 
+    def self.rpm_version_transform_opensuse(name, op, version)
+      if op == '~>'
+        version_parts = version.bump.to_s.split('.')
+        version_parts[-1] = (Integer(version_parts[-1])-1).to_s
+        op = '>='
+        name = "#{name}-#{version_parts.join('_')}"
+      end
+      return ["#{name} #{op} #{version}"] unless ['0', '0.0', '0.0.0'].include? version
+      return ["#{name}"]
+    end
+
     def to_rpm
       return requirements.map { |op, version| self.class.rpm_version_transform(op, version) }.flatten
     end
