@@ -35,7 +35,7 @@ Requires:       ruby <%= spec.required_ruby_version.to_rpm %>
 BuildRequires:  ruby-devel <%= spec.required_ruby_version.to_rpm %>
 <% end %>
 <% for d in spec.dependencies %>
-<% for req in d.version_requirements.to_rpm %>
+<% for req in d.requirement.to_rpm %>
 BuildRequires:  rubygem-<%= d.name %> <%= req %>
 Requires:       rubygem-<%= d.name %> <%= req %>
 <% end %>
