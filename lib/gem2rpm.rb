@@ -68,6 +68,7 @@ module Gem2Rpm
     format = Gem::Format.from_file_by_path(fname)
     spec = format.spec
     spec.description ||= spec.summary
+    spec.homepage ||= "http://rubygems.org/gems/#{spec.name}"
     download_path = ""
     unless local
       begin
