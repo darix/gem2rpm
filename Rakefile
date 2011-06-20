@@ -8,7 +8,7 @@ require 'rake/testtask'
 PKG_NAME="gem2rpm"
 SPEC_FILE="rubygem-gem2rpm.spec"
 
-if `ruby -Ilib ./bin/gem2rpm --version` =~ /\S+$/
+if `ruby -Ilib -rubygems ./bin/gem2rpm --version` =~ /\S+$/
   CURRENT_VERSION = $&
 else
   CURRENT_VERSION = "0.0.0"
@@ -23,8 +23,12 @@ end
 PKG_FILES = FileList[
   'bin/**/*',
   'lib/**/*',
+  'templates/*',
+  'test/**/*',
+  'AUTHORS',
   'LICENSE',
   'README',
+  'Rakefile',
   SPEC_FILE
 ]
 
