@@ -52,7 +52,7 @@ module Gem
         next_version = Gem::Version.create(version).bump.to_s
         return ["=> #{version}", "< #{next_version}"]
       end
-      return ["#{op} #{version}"] unless ['0', '0.0', '0.0.0'].include? version
+      return ["#{op} #{version}"] unless Gem::Version.new(0) == version
       return [""]
     end
 
@@ -63,7 +63,7 @@ module Gem
         op = '>='
         name = "#{name}-#{version_parts.join('_')}"
       end
-      return ["#{name} #{op} #{version}"] unless ['0', '0.0', '0.0.0'].include? version
+      return ["#{name} #{op} #{version}"] unless Gem::Version.new(0) == version
       return ["#{name}"]
     end
 
