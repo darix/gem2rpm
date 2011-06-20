@@ -24,20 +24,17 @@ end
 
 module Gem
   class Requirement
-    def rpm_version_transform(version)
-      if version == "> 0.0.0"
-        version = ""
-      elsif version =~ /^~> (.+)$/
-        next_version = Gem::Version.create($1).bump.to_s
-
-        version = ["=> #$1", "< #{next_version}"]
+    def rpm_version_transform(op, version)
+      if op == '~>'
+        next_version = Gem::Version.create(version).bump.to_s
+        return ["=> #{version}", "< #{next_version}"]
       end
-      version
+      return ["#{op} #{version}"] unless ['0', '0.0', '0.0.0'].include? version
+      return [""]
     end
 
     def to_rpm
-      result = as_list
-      return result.map { |version| rpm_version_transform(version) }.flatten
+      return requirements.map { |op, version| rpm_version_transform(op, version) }.flatten
     end
 
   end
