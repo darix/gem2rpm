@@ -35,6 +35,7 @@ BuildRequires:  rubygems_with_buildroot_patch
 %rubygems_requires
 <%
 # no need to add a requires ruby >= 0 here. will be pulled in via rubygems already
+# we use Gem::Version.new(1) as ruby 1.0 wouldnt be able to run rubygems anyway
   unless spec.required_ruby_version.satisfied_by?(Gem::Version.new(1))
 %>
 Requires:       ruby <%= spec.required_ruby_version.to_rpm %>
