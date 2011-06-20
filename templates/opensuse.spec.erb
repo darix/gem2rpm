@@ -35,7 +35,7 @@ BuildRequires:  rubygems_with_buildroot_patch
 %rubygems_requires
 <%
 # no need to add a requires ruby >= 0 here. will be pulled in via rubygems already
-  unless spec.required_ruby_version.satisfied_by?(Gem::Requirement.default)
+  unless spec.required_ruby_version.satisfied_by?(Gem::Version.new(1))
 %>
 Requires:       ruby <%= spec.required_ruby_version.to_rpm %>
 BuildRequires:  ruby-devel <%= spec.required_ruby_version.to_rpm %>
