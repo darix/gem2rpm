@@ -35,8 +35,9 @@ module Gem
         # rubygem-foo-1.0: Provides: rubygem-foo = 1.0
         # rubygem-foo-1.1: Provides: rubygem-foo = 1.1
         #
-        # foo2 satisfies the >= 1.0.0 part and foo1 satisfies the < 1.1 part
-        # but neither of them is a version that would satisfy the gem dependency.
+        # rubygem-foo-1.1 satisfies the >= 1.0.0 part and rubygem-foo-0.9
+        # satisfies the < 1.1 part but neither of them is a version that would
+        # satisfy the gem dependency.
         #
         # A cleaner solution might be converting it to a "=" requirement
         # but that adds a lot of work on the maintainer.
