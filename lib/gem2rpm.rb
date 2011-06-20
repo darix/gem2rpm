@@ -26,6 +26,28 @@ module Gem
   class Requirement
     def rpm_version_transform(op, version)
       if op == '~>'
+        # note:
+        #
+        # while this works in most cases it can lead to buggy systems
+        # Requires: rubygem-foo >= 1.0.0 rubygem-foo < 1.1
+        #
+        # rubygem-foo-0.9: Provides: rubygem-foo = 0.9
+        # rubygem-foo-1.0: Provides: rubygem-foo = 1.0
+        # rubygem-foo-1.1: Provides: rubygem-foo = 1.1
+        #
+        # foo2 satisfies the >= 1.0.0 part and foo1 satisfies the < 1.1 part
+        # but neither of them is a version that would satisfy the gem dependency.
+        #
+        # A cleaner solution might be converting it to a "=" requirement
+        # but that adds a lot of work on the maintainer.
+        #
+        # Or adding the requires on the versioned package name
+        # Requires: rubygem-foo-1.0 >= 1.0.0
+        #
+        # For a programmatic way to transform this, we would need to pass
+        # name into the rpm_version_transform method or move the whole transformation
+        # logic out of the Gem::Requirement class.
+        #
         next_version = Gem::Version.create(version).bump.to_s
         return ["=> #{version}", "< #{next_version}"]
       end
