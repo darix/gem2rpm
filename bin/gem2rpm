@@ -116,6 +116,6 @@ end
 
 if deps
     Gem::Format.from_file_by_path(gemfile).spec.dependencies.each do |dep|
-        puts "rubygem(#{dep.name}) #{dep.version_requirements.to_rpm}"
+        puts "rubygem(#{dep.name}) #{dep.requirement.to_rpm}"
     end
 end

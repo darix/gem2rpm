@@ -65,7 +65,7 @@ class TestVersionConversion < Test::Unit::TestCase
 
     Gem2Rpm::convert(gem_path, Gem2Rpm::TEMPLATE, out, false)
 
-    assert_no_match(/\sURL: /, out.string)
+    assert_match(/\s#FIXME cannot obtain URL /, out.string)
   end
 
   def test_rubygems_version_requirement
@@ -75,7 +75,8 @@ class TestVersionConversion < Test::Unit::TestCase
 
     Gem2Rpm::convert(gem_path, Gem2Rpm::TEMPLATE, out, false)
 
-    assert_match(/\sRequires: rubygems >= 1.3.6/, out.string)
+    #assert_match(/\sRequires: rubygems >= 1.3.6/, out.string)
+    assert_match(/\sRequires: ruby-gems >= 1.8.11/, out.string)
   end
 
   def test_rubys_version_requirement
@@ -87,6 +88,37 @@ class TestVersionConversion < Test::Unit::TestCase
 
     assert_match(/\sRequires: ruby >= 1.8.6/, out.string)
     assert_match(/\sBuildRequires: ruby >= 1.8.6/, out.string)
+  end
+
+  def test_rpm_version_transform_opensuse_equals_operator
+    version = Gem::Version.create("1.0.0")
+    actual = Gem::Requirement::rpm_version_transform_opensuse("name","=",version)
+    expected = ["name = 1.0.0"]
+    assert_equal(expected,actual)
+  end
+
+  def test_rpm_version_transform_opensuse_tilde_operator
+    version = Gem::Version.create("1.0.0")
+    actual = Gem::Requirement::rpm_version_transform_opensuse("name","~>",version)
+    expected = ["name-1_0 >= 1.0.0"] 
+    assert_equal(expected,actual)
+  end
+
+  def test_rpm_version_transform_opensuse_equals_operator_version_null
+    version = Gem::Version.create(0)
+    actual = Gem::Requirement::rpm_version_transform_opensuse("name","=",version)
+    expected = ["name"] 
+    assert_equal(expected,actual)
+  end
+
+  def test_word_wrap
+    actual = ""
+    expected = "1"
+    39.times { expected = expected + " 1" }
+    expected = expected + "\n1"
+    41.times { actual = actual + " 1" }
+    actual = actual.word_wrap
+    assert_equal(expected, actual)
   end
 
 end

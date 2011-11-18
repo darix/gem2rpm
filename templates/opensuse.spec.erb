@@ -53,7 +53,12 @@ Requires:       <%= req %>
 <% end %>
 <% end %>
 #
-Url:            <%= spec.homepage %>
+<% if spec.homepage %>
+Url: <%= spec.homepage %>
+<% else%>
+#FIXME cannot obtain URL from gem, need manual digging
+Url: 
+<% end%>
 Source:         %{mod_full_name}.gem
 #
 Summary:        <%= spec.summary.gsub(/\.$/, "") %>
