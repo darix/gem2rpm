@@ -82,6 +82,7 @@ module Gem2Rpm
       installer = Gem::RemoteInstaller.new
       dummy, download_path = installer.find_gem_to_install(name, "=#{version}")
       download_path += "/gems/" if download_path.to_s != ""
+      raise Gem::Exception, "not a download_path for #{name} = #{version}", caller unless download_path
       return download_path
     end
   else
@@ -90,6 +91,7 @@ module Gem2Rpm
       fetcher = Gem::SpecFetcher.fetcher
       dummy, download_path = fetcher.find_matching(dep, false, false).first
       download_path += "gems/" if download_path.to_s != ""
+      raise Gem::Exception, "not a download_path for #{name} = #{version}", caller unless download_path
       return download_path
     end
   end
@@ -99,11 +101,11 @@ module Gem2Rpm
     format = Gem::Format.from_file_by_path(fname)
     spec = format.spec
     spec.description ||= spec.summary
-    spec.homepage ||= "http://rubygems.org/gems/#{spec.name}"
     download_path = ""
     unless local
       begin
         download_path = find_download_url(spec.name, spec.version)
+        spec.homepage = download_path
       rescue Gem::Exception => e
         $stderr.puts "Warning: Could not retrieve full URL for #{spec.name}\nWarning: Edit the specfile and enter the full download URL as 'Source0' manually"
         $stderr.puts "#{e.inspect}"

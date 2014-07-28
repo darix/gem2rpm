@@ -37,7 +37,7 @@ Requires: ruby <%= req %>
 if d.respond_to?(:requirement)
   requirement = d.requirement
 else
-  requirement = d.version_requirements
+  requirement = d.requirement
 end
 for req in requirement.to_rpm %>
 Requires: rubygem(<%= d.name %>) <%= req  %>
